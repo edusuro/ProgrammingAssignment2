@@ -36,9 +36,11 @@ class Inputs:
     ss_caregiver_benefit_end_child_age: int = 16
 
     # ---- house --------------------------------------------------------------
-    mortgage_balance: float = 320_000         # PLACEHOLDER
+    mortgage_balance: float = 160_000         # CONFIRMED by client
     mortgage_rate: float = .0275              # PLACEHOLDER (the whole point)
-    mortgage_months_remaining: int = 264      # PLACEHOLDER: 22 years
+    mortgage_months_remaining: int = 240      # PLACEHOLDER: unknown, sweep it.
+    #   This is now the single most important unknown: at $160k the cost of
+    #   cashing out ranges from ~$41k (8 yrs left) to ~$200k (22 yrs left).
     home_value: float = 525_000               # PLACEHOLDER
     home_appreciation: float = .03
     property_tax_annual: float = 4_200        # PLACEHOLDER (Cobb County)
