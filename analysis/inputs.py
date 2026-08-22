@@ -36,11 +36,14 @@ class Inputs:
     ss_caregiver_benefit_end_child_age: int = 16
 
     # ---- house --------------------------------------------------------------
-    mortgage_balance: float = 160_000         # CONFIRMED by client
-    mortgage_rate: float = .0275              # PLACEHOLDER (the whole point)
-    mortgage_months_remaining: int = 240      # PLACEHOLDER: unknown, sweep it.
-    #   This is now the single most important unknown: at $160k the cost of
-    #   cashing out ranges from ~$41k (8 yrs left) to ~$200k (22 yrs left).
+    mortgage_balance: float = 167_332         # CONFIRMED
+    mortgage_rate: float = .0275              # PLACEHOLDER: "2-3%", not confirmed
+    mortgage_months_remaining: int = 120      # CONFIRMED: ~10 years
+    #   Client states the monthly payment is $2,205.16. That CANNOT be P&I:
+    #   at 2.75% over 120 months, P&I on $167,332 is $1,596.53. For $2,205.16
+    #   to be P&I the rate would have to be ~9.93%, or the term ~7 years.
+    #   So $2,205.16 is PITI, and ~$608.63/mo of it is escrowed property tax
+    #   and insurance -- which CONTINUES after the mortgage is paid off.
     home_value: float = 525_000               # PLACEHOLDER
     home_appreciation: float = .03
     property_tax_annual: float = 4_200        # PLACEHOLDER (Cobb County)
