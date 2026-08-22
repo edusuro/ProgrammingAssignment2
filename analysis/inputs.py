@@ -20,9 +20,9 @@ class Inputs:
     horizon_year: int = 2046                  # model through her age 72
 
     # ---- income -------------------------------------------------------------
-    her_salary: float = 85_000                # PLACEHOLDER
+    her_salary: float = 86_000                # CONFIRMED
     salary_growth: float = .03
-    decedent_wages_2026: float = 60_000       # PLACEHOLDER: earned before death
+    decedent_wages_2026: float = 80_000       # CONFIRMED: earned before death
 
     # ---- Social Security survivor benefits ---------------------------------
     # The single biggest item missing from the original framing.
@@ -58,7 +58,7 @@ class Inputs:
     expense_inflation: float = .025
 
     # ---- assets -------------------------------------------------------------
-    inherited_401k_traditional: float = 700_000    # PLACEHOLDER
+    inherited_401k_traditional: float = 611_000    # CONFIRMED (total account)
     inherited_401k_roth: float = 0                 # PLACEHOLDER
     taxable_brokerage: float = 50_000              # PLACEHOLDER, stepped-up basis
     taxable_basis: float = 50_000                  # = value at date of death
