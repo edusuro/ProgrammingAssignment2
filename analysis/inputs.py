@@ -37,7 +37,7 @@ class Inputs:
 
     # ---- house --------------------------------------------------------------
     mortgage_balance: float = 167_332         # CONFIRMED
-    mortgage_rate: float = .0275              # PLACEHOLDER: "2-3%", not confirmed
+    mortgage_rate: float = .0250              # CONFIRMED approx; escrow test consistent
     mortgage_months_remaining: int = 120      # CONFIRMED: ~10 years
     #   Client states the monthly payment is $2,205.16. That CANNOT be P&I:
     #   at 2.75% over 120 months, P&I on $167,332 is $1,596.53. For $2,205.16
