@@ -14,7 +14,9 @@ from dataclasses import dataclass, field
 @dataclass
 class Inputs:
     # ---- people -------------------------------------------------------------
-    her_age_start: float = 52                 # age on 1 Jan of start_year
+    her_age_start: float = 52                 # CONFIRMED (b. 1974)
+    #   He was 50 at death, ~25 years short of his RMD age of 75, so
+    #   nothing is forced out of the account until roughly 2051.
     child_age_start: int = 12                 # PLACEHOLDER
     start_year: int = 2026
     horizon_year: int = 2046                  # model through her age 72
@@ -58,7 +60,9 @@ class Inputs:
     expense_inflation: float = .025
 
     # ---- assets -------------------------------------------------------------
-    inherited_401k_traditional: float = 611_000    # CONFIRMED (total account)
+    inherited_401k_traditional: float = 611_411    # CONFIRMED per TIAA letter
+    #   $8,523.15 CREF + $602,887.78 mutual funds, valued 07/20/2026.
+    #   No TIAA Traditional, so no ten-year payout constraint; fully liquid.
     inherited_401k_roth: float = 0                 # PLACEHOLDER
     taxable_brokerage: float = 50_000              # PLACEHOLDER, stepped-up basis
     taxable_basis: float = 50_000                  # = value at date of death
