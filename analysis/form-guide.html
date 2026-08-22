@@ -1,0 +1,293 @@
+<title>Spouse Acceptance Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#F3F5F6; --surface:#FFFFFF; --sunk:#E8ECEE;
+  --ink:#131B21; --ink-2:#3D4C54; --ink-3:#6B7A81;
+  --rule:#D3DADD; --rule-soft:#E4E9EB;
+  --go:#1B6663;   --go-soft:#DCEAE8;
+  --stop:#A2413A; --stop-soft:#F6E4E2;
+  --hold:#8A6410; --hold-soft:#F7EEDA;
+  --skip:#69777F; --skip-soft:#EAEEF0;
+  --shadow:0 1px 2px rgba(19,27,33,.05), 0 8px 24px -16px rgba(19,27,33,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1418; --surface:#151D22; --sunk:#1C262C;
+    --ink:#E8EDEF; --ink-2:#AEBCC2; --ink-3:#7E8E96;
+    --rule:#2A363D; --rule-soft:#212C32;
+    --go:#5FBDB4;   --go-soft:#17302F;
+    --stop:#E08D84; --stop-soft:#331E1C;
+    --hold:#D6AC55; --hold-soft:#2E2616;
+    --skip:#8B9AA3; --skip-soft:#1E282E;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1418; --surface:#151D22; --sunk:#1C262C;
+  --ink:#E8EDEF; --ink-2:#AEBCC2; --ink-3:#7E8E96;
+  --rule:#2A363D; --rule-soft:#212C32;
+  --go:#5FBDB4;   --go-soft:#17302F;
+  --stop:#E08D84; --stop-soft:#331E1C;
+  --hold:#D6AC55; --hold-soft:#2E2616;
+  --skip:#8B9AA3; --skip-soft:#1E282E;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--ground); color:var(--ink);
+  font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16.5px; line-height:1.6; -webkit-font-smoothing:antialiased}
+.wrap{max-width:880px; margin:0 auto; padding:0 clamp(18px,4vw,36px) 88px}
+
+header.mast{padding:clamp(38px,6vw,70px) 0 24px; border-bottom:1px solid var(--rule);
+  display:flex; flex-direction:column; gap:15px}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+  display:flex; flex-wrap:wrap; gap:9px 18px}
+h1{font-family:Newsreader,Georgia,serif; font-weight:500;
+  font-size:clamp(2rem,5vw,3rem); line-height:1.1; letter-spacing:-.018em;
+  margin:0; text-wrap:balance}
+.standfirst{font-family:Newsreader,Georgia,serif; font-size:clamp(1.04rem,2vw,1.24rem);
+  line-height:1.5; color:var(--ink-2); max-width:58ch; margin:0}
+.standfirst strong{color:var(--ink); font-weight:600}
+
+.block{background:var(--surface); border:1px solid var(--rule); border-radius:3px;
+  padding:clamp(18px,2.6vw,26px); box-shadow:var(--shadow);
+  display:flex; flex-direction:column; gap:11px; border-left:3px solid var(--go)}
+.block.stop{border-left-color:var(--stop)}
+.block.hold{border-left-color:var(--hold)}
+.block h2{margin:0; font-family:"IBM Plex Mono",monospace; font-size:11.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--go); font-weight:600}
+.block.stop h2{color:var(--stop)}
+.block.hold h2{color:var(--hold)}
+.block p{margin:0; color:var(--ink-2); max-width:64ch}
+.block p.lead{font-family:Newsreader,Georgia,serif; font-size:1.2rem;
+  line-height:1.42; color:var(--ink)}
+.block strong{color:var(--ink); font-weight:600}
+.block em{color:var(--ink); font-style:italic}
+
+section{padding-top:clamp(36px,5vw,56px)}
+h2.sec{font-family:Newsreader,Georgia,serif; font-weight:500;
+  font-size:clamp(1.4rem,2.9vw,1.9rem); line-height:1.18; letter-spacing:-.012em;
+  margin:0 0 5px; text-wrap:balance}
+.sec-note{color:var(--ink-3); margin:0 0 22px; max-width:60ch; font-size:.94rem}
+.stack{display:flex; flex-direction:column; gap:14px}
+
+/* ---- one card per page of the form ---- */
+.row{display:grid; grid-template-columns:74px 1fr; background:var(--surface);
+  border:1px solid var(--rule-soft); border-radius:3px; overflow:hidden}
+.pg{background:var(--sunk); border-right:1px solid var(--rule-soft);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px; padding:16px 6px; text-align:center}
+.pg .n{font-family:"IBM Plex Mono",monospace; font-size:1.15rem; font-weight:600;
+  color:var(--ink); font-variant-numeric:tabular-nums; line-height:1}
+.pg .l{font-family:"IBM Plex Mono",monospace; font-size:8.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3)}
+.rb{padding:16px clamp(14px,2.2vw,22px); display:flex; flex-direction:column; gap:7px}
+.rh{display:flex; align-items:baseline; gap:11px; flex-wrap:wrap}
+.rh h3{margin:0; font-family:Newsreader,Georgia,serif; font-weight:600;
+  font-size:1.08rem; line-height:1.3; letter-spacing:-.006em}
+.chip{font-family:"IBM Plex Mono",monospace; font-size:9.5px; font-weight:600;
+  letter-spacing:.11em; text-transform:uppercase; padding:3px 8px; border-radius:2px;
+  white-space:nowrap; flex:0 0 auto}
+.chip.go{color:var(--go); background:var(--go-soft)}
+.chip.skip{color:var(--skip); background:var(--skip-soft)}
+.chip.stop{color:var(--stop); background:var(--stop-soft)}
+.chip.hold{color:var(--hold); background:var(--hold-soft)}
+.rb p{margin:0; color:var(--ink-2); font-size:.94rem; max-width:62ch}
+.rb strong{color:var(--ink); font-weight:600}
+.rb em{color:var(--ink); font-style:italic}
+.quote{border-left:2px solid var(--rule); padding-left:12px; color:var(--ink-3);
+  font-style:italic; font-size:.9rem}
+@media (max-width:560px){
+  .row{grid-template-columns:1fr}
+  .pg{flex-direction:row; gap:8px; justify-content:flex-start; padding:9px 16px;
+    border-right:none; border-bottom:1px solid var(--rule-soft)}
+}
+
+.key{display:flex; flex-wrap:wrap; gap:8px 20px; margin:0; padding:0; list-style:none}
+.key li{display:flex; align-items:center; gap:8px; font-size:.88rem; color:var(--ink-2)}
+
+footer{margin-top:clamp(40px,6vw,68px); padding-top:22px; border-top:1px solid var(--rule);
+  color:var(--ink-3); font-size:.87rem; line-height:1.6}
+footer p{margin:0 0 10px; max-width:68ch}
+footer strong{color:var(--ink-2)}
+a{color:var(--go); text-underline-offset:2px}
+a:focus-visible{outline:2px solid var(--go); outline-offset:3px}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="eyebrow"><span>TIAA Spouse Acceptance</span><span>17 pages</span><span>Marked up for the family</span></div>
+  <h1>Which boxes to tick, page by page</h1>
+  <p class="standfirst">The whole packet comes down to <strong>one decision asked three times</strong>, five sections to fill in, and eight to leave completely empty. Two things need sorting out before anything is signed.</p>
+</header>
+
+<section>
+  <div class="block stop">
+    <h2>Sort this out first</h2>
+    <p class="lead">Page 3 has been filled in, and it probably shouldn't be.</p>
+    <p>Section 3 is headed <em>"See-Through Trust, Trust Information"</em> and is only for someone acting as <strong>trustee of a trust</strong>. Her name, address, Social Security number and date of birth are written into the Trustee block, with a successor trustee named underneath.</p>
+    <p>If she inherits this <strong>personally</strong> — which the "Spouse Acceptance" title on every page suggests — Section 3 should be entirely blank. This matters more than it looks: the signature page has her certifying <em>"If I am a spouse beneficiary of a See-Through Trust, I have consulted with the Trustee… and TIAA has relied upon the information I have provided in calculating my RMDs."</em> Signing with that section filled in makes a statement about how the money is held.</p>
+    <p><strong>What to do:</strong> call TIAA at 800-842-2252, confirm whether the named beneficiary is her or a trust, and ask for a clean form if it's her. Don't cross it out — the form says it is void if altered.</p>
+  </div>
+</section>
+
+<section>
+  <div class="block hold">
+    <h2>And find this out</h2>
+    <p class="lead">How old was he when he died?</p>
+    <p>It decides Section 8, which contains the only <strong>irrevocable</strong> choice in the packet. If he was under 73, most of that section collapses into "nothing required for many years" and the form largely answers itself. If he was older, a required withdrawal for 2026 may still be owed and the section has to be completed carefully.</p>
+    <p>There's also a clock. Page 1 notes a <strong>60-day settlement period</strong> for at least one account type, after which the choices narrow to exactly the two we don't want — roll it into her name, or cash it all out. Ask TIAA what her actual deadline is.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec">The one decision, asked three times</h2>
+  <p class="sec-note">Three different kinds of account came with the inheritance, and each has its own page asking whether she wants it in her name or kept in his. All three get the same answer: <strong>keep it in his</strong>.</p>
+
+  <div class="stack">
+    <div class="row">
+      <div class="pg"><span class="n">4</span><span class="l">Section</span></div>
+      <div class="rb">
+        <div class="rh"><h3>The retirement plan</h3><span class="chip go">Tick Option 1</span></div>
+        <p><strong>"Stay in the plan as a beneficiary."</strong> Leave Option 1A (partial cash withdrawal) empty — she can request money any time later without committing to an amount now.</p>
+        <p>Check the <strong>"All Accounts"</strong> box above it so the choice covers every plan account, and ask TIAA to confirm that's the right way to do it when several accounts are involved.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">5</span><span class="l">Section 4</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Roll over to my own account · Full cash withdrawal</h3><span class="chip stop">Leave both empty</span></div>
+        <p>Option 2 is the one that costs about <strong>$30,000</strong> in penalties. Option 3 is the one that costs about <strong>$92,000</strong> over ten years. Neither box gets touched.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">IRA</span><span class="l">Mandatory</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Inheriting an IRA</h3><span class="chip go">Tick Option 2</span></div>
+        <p><strong>"Remain as a spouse beneficiary under my spouse's original contract."</strong> Not Option 1.</p>
+        <p class="quote">TIAA's own wording under Option 1: "10% tax penalty for withdrawals under age 59½… Inheritance of the account is not an exception with respect to your own IRA." Under Option 2: "No tax penalties for taking withdrawals prior to age 59½."</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">ATRA</span><span class="l">Mandatory</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Inheriting an After-Tax Retirement Annuity</h3><span class="chip go">Tick Option 2</span></div>
+        <p><strong>"I elect to be treated as a designated beneficiary under my spouse's original contract."</strong> Again, not Option 1 — that one says plainly, <em>"Death of your spouse is not an exception."</em></p>
+        <p>Worth asking about separately: an after-tax annuity holds money that was already taxed once, so part of it may come back out tax-free. If a decent share of the balance is here, it could be the cheapest place to draw the mortgage money from.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec">Everything else</h2>
+  <p class="sec-note">In form order. Most of it she doesn't touch.</p>
+  <ul class="key">
+    <li><span class="chip go">Fill in</span></li>
+    <li><span class="chip skip">Leave blank</span></li>
+    <li><span class="chip hold">Ask first</span></li>
+  </ul>
+
+  <div class="stack" style="margin-top:18px">
+    <div class="row">
+      <div class="pg"><span class="n">6</span><span class="l">Section 5</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Tax withholding on regular payments</h3><span class="chip hold">Ask first</span></div>
+        <p>This sets withholding on a <strong>recurring payment stream</strong> — and the form calls those streams <em>"irrevocable."</em> She isn't setting one up, so there may be nothing here to withhold from. Ask TIAA whether it must be completed at all when no payments are being scheduled.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">7</span><span class="l">Section 6</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Tax withholding on one-off payments</h3><span class="chip skip">Leave blank</span></div>
+        <p>Only applies if a withdrawal he was required to take in 2026 is still owed. Depends entirely on his age — see above.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">8</span><span class="l">Withholding</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Rollover-eligible distributions</h3><span class="chip skip">Leave blank</span></div>
+        <p>Its own instructions say to complete it only for a partial or full cash withdrawal. She's doing neither.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">9</span><span class="l">Section 7</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Required withdrawals — deaths through 2021</h3><span class="chip skip">Leave blank</span></div>
+        <p>Wrong period. This section covers deaths on or before 2019, or 2021 for state plans. Section 8 is hers.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">10</span><span class="l">Section 8</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Required withdrawals — deaths from 2020 on</h3><span class="chip hold">The irrevocable one</span></div>
+        <p><strong>Do not tick "10-Year Rule."</strong> It's optional, it's only for IRAs, and it would force the whole account out within ten years for no reason.</p>
+        <p>The election below it — being treated as the employee, which uses the table that produces the <em>smaller</em> required withdrawals — is generally the favourable one. But the form states it <strong>cannot be reversed</strong>, and if he died before reaching required-withdrawal age she may be required to use that table anyway, making the election unnecessary. <strong>This is the single box worth a CPA's twenty minutes before it's ticked.</strong></p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">11</span><span class="l">Section 8</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Payment start date and frequency</h3><span class="chip skip">Leave blank</span></div>
+        <p>Good news lives on this page: <em>"you may still take a distribution by making separate withdrawal requests."</em> She does <strong>not</strong> have to schedule recurring payments to get money out — she can request a withdrawal whenever she needs one, in whatever amount. That's exactly what the plan needs, since the yearly amounts differ.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">12</span><span class="l">Section 9</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Rollover instructions</h3><span class="chip skip">Leave blank</span></div>
+        <p>Every field. The page's own margin says: <em>"Do not complete this page if you chose Option 1 — stay in the plan as a beneficiary."</em></p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">13</span><span class="l">Section 10</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Where to send the money</h3><span class="chip skip">Leave blank</span></div>
+        <p>Only for a cash withdrawal or a required payment. Since she's taking nothing now, there's nowhere to send anything. Bank details can be added later, online, when she does want a withdrawal.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">14<span style="opacity:.5">–</span>15</span><span class="l">Section 11</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Naming her own beneficiaries</h3><span class="chip go">Must fill in</span></div>
+        <p>Required with Option 1, and currently empty. This is who inherits the account after her — primary on page 14, backups on page 15. She can change it any time later, online.</p>
+        <p><strong>Worth a moment's thought, not a reflex.</strong> If she names a child who is still a minor, a court may have to appoint a guardian before they could actually receive it. The usual fix is naming a custodian or a trust instead. One question for whoever is handling the estate.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="pg"><span class="n">16</span><span class="l">Section 12</span></div>
+      <div class="rb">
+        <div class="rh"><h3>Signature</h3><span class="chip go">Sign — with a notary</span></div>
+        <p>Sign, date, and add her Social Security number. Leave <strong>"Capacity" blank</strong> — that box is only for someone signing on another person's behalf.</p>
+        <p><strong>Because the inheritance is over $200,000, this has to be signed in front of a notary</strong> — unless she already has her own TIAA account, which waives it. Banks and public libraries usually have one. The notary then completes page 17.</p>
+        <p>Don't sign until page 3 is resolved. That's what the signature certifies.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Before it goes in the envelope:</strong> page 3 blank or confirmed, his age at death checked against Section 8, Section 11 filled in, and a notary lined up. Photograph or photocopy every page after signing — TIAA can lose things, and re-creating this is miserable.</p>
+  <p><strong>This is a reading of the form, not legal or tax advice.</strong> It was written from photographs of the packet, and one page — the first, with the account list and balances — hasn't been reviewed. TIAA's own service line, 800-842-2252, can confirm anything here for free, and the two flagged items at the top are worth a professional's time before signing.</p>
+</footer>
+
+</div>
