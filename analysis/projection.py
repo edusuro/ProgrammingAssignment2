@@ -11,13 +11,17 @@ Convention shared by all scenarios so they compare fairly:
     his $80k also landed in 2026; from 2027 she is on her $86k alone.
   - If a scenario has no mortgage in 2026, it is credited with that freed salary.
   - Once the mortgage is gone, no further withdrawals are taken.
-  - Leftover cash goes to a taxable side pot earning the market return less a
-    50bp drag; sales are taxed at 15% on the gain.
+  - Leftover cash goes into ordinary savings earning SIDE_RATE (3%), with the
+    interest taxed as ordinary income each year -- this is a bank account, not
+    an investment account. That is deliberately conservative: it is what money
+    earmarked for the next few mortgage payments would realistically sit in.
 """
 
 import taxes
 from inputs import DEFAULT
 from model import filing_status
+
+SIDE_RATE = .03   # savings/CD rate on money set aside, per client instruction
 
 INP = DEFAULT
 YEARS = list(range(2026, 2036))
@@ -53,13 +57,25 @@ def context(year):
             INP.decedent_wages_2026 if year == 2026 else 0.0)
 
 
-def tax_on(w, year):
+def tax_on(w, year, interest=0.0):
     st, kids, wages, his = context(year)
-    a = dict(wages=wages, other_ordinary_income=his, qualified_dividends=0, ltcg=0,
-             status=st, age=52 + (year-2026), n_children=kids, year=year,
+    a = dict(wages=wages, other_ordinary_income=his + interest, qualified_dividends=0,
+             ltcg=0, status=st, age=52 + (year-2026), n_children=kids, year=year,
              inflation=INP.inflation)
     return (taxes.total_tax(retirement_distribution=w, **a)["total"]
             - taxes.total_tax(retirement_distribution=0, **a)["total"])
+
+
+def _interest_tax(interest, year):
+    """Ordinary income tax on a year of savings interest."""
+    if interest <= 0:
+        return 0.0
+    st, kids, wages, his = context(year)
+    a = dict(wages=wages, qualified_dividends=0, ltcg=0, status=st,
+             age=52 + (year-2026), n_children=kids, year=year,
+             inflation=INP.inflation, retirement_distribution=0)
+    return (taxes.total_tax(other_ordinary_income=his + interest, **a)["total"]
+            - taxes.total_tax(other_ordinary_income=his, **a)["total"])
 
 
 def gross_up(net, year):
@@ -90,7 +106,7 @@ def project(name, *, payoff_year=None, prepay=False, bracket_fill=False):
         # Spend banked cash before pulling more from the 401(k) -- otherwise a
         # bracket-fill strategy pays 27% on new withdrawals while sitting on a
         # side pot, which defeats the entire point of filling the bracket.
-        side_cash = side * (1 - (1 - basis/side)*.15) if side > 0 else 0.0
+        side_cash = side          # already-taxed savings; spending it is tax-free
 
         if loan.balance <= 0.005:
             w = 0.0
@@ -126,17 +142,17 @@ def project(name, *, payoff_year=None, prepay=False, bracket_fill=False):
         if salary_covers and loan.balance <= 0.005 and payoff_year == 2026:
             cash += loan.payment*12          # freed salary, credited for fairness
 
-        # ---- top up from the side pot if short ------------------------------
+        # ---- top up from savings if short -----------------------------------
         if cash < -0.005 and side > 0:
             take = min(-cash, side)
-            gain = take * (1 - basis/side)
-            basis -= take - gain; side -= take
-            tax_paid += gain*.15
-            cash += take - gain*.15
+            side -= take
+            cash += take
 
-        side += max(0.0, cash); basis += max(0.0, cash)
+        side += max(0.0, cash)
         k401 *= (1 + INP.expected_return)
-        side *= (1 + INP.expected_return - .005)
+        interest = side * SIDE_RATE
+        tax_paid += _interest_tax(interest, year)
+        side += interest - _interest_tax(interest, year)
         if loan.balance <= 0.005 and payoff_done is None:
             payoff_done = year
 

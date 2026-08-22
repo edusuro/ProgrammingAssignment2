@@ -1,0 +1,403 @@
+<title>Inherited 401(k) Pressure Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#F3F5F6; --surface:#FFFFFF; --sunk:#E8ECEE;
+  --ink:#131B21; --ink-2:#3D4C54; --ink-3:#6B7A81;
+  --rule:#D3DADD; --rule-soft:#E4E9EB;
+  --accent:#1B6663; --accent-soft:#DCEAE8;
+  --no:#A2413A; --no-soft:#F6E4E2;
+  --warn:#8A6410; --warn-soft:#F7EEDA;
+  --shadow:0 1px 2px rgba(19,27,33,.05), 0 8px 24px -16px rgba(19,27,33,.28);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1418; --surface:#151D22; --sunk:#1C262C;
+    --ink:#E8EDEF; --ink-2:#AEBCC2; --ink-3:#7E8E96;
+    --rule:#2A363D; --rule-soft:#212C32;
+    --accent:#5FBDB4; --accent-soft:#17302F;
+    --no:#E08D84; --no-soft:#331E1C;
+    --warn:#D6AC55; --warn-soft:#2E2616;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1418; --surface:#151D22; --sunk:#1C262C;
+  --ink:#E8EDEF; --ink-2:#AEBCC2; --ink-3:#7E8E96;
+  --rule:#2A363D; --rule-soft:#212C32;
+  --accent:#5FBDB4; --accent-soft:#17302F;
+  --no:#E08D84; --no-soft:#331E1C;
+  --warn:#D6AC55; --warn-soft:#2E2616;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16.5px; line-height:1.62; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:820px; margin:0 auto; padding:0 clamp(18px,4vw,36px) 90px}
+
+header.mast{padding:clamp(40px,7vw,76px) 0 26px; border-bottom:1px solid var(--rule);
+  display:flex; flex-direction:column; gap:16px}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+  display:flex; flex-wrap:wrap; gap:10px 18px}
+h1{font-family:Newsreader,Georgia,serif; font-weight:500;
+  font-size:clamp(2rem,5vw,3.1rem); line-height:1.1; letter-spacing:-.018em;
+  margin:0; text-wrap:balance}
+.standfirst{font-family:Newsreader,Georgia,serif; font-size:clamp(1.05rem,2vw,1.26rem);
+  line-height:1.5; color:var(--ink-2); max-width:58ch; margin:0}
+.standfirst strong{color:var(--ink); font-weight:600}
+
+/* decision blocks */
+.decision{margin-top:clamp(36px,5vw,54px)}
+.dhead{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:4px}
+.dnum{font-family:"IBM Plex Mono",monospace; font-size:11.5px; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--accent)}
+h2{font-family:Newsreader,Georgia,serif; font-weight:500;
+  font-size:clamp(1.45rem,3vw,1.95rem); line-height:1.18; letter-spacing:-.012em;
+  margin:0; text-wrap:balance}
+.answer{
+  margin:18px 0 0; background:var(--surface); border:1px solid var(--rule);
+  border-left:3px solid var(--accent); border-radius:3px;
+  padding:clamp(18px,2.6vw,26px); box-shadow:var(--shadow);
+  display:flex; flex-direction:column; gap:12px;
+}
+.answer .verdict{font-family:Newsreader,Georgia,serif; font-size:1.24rem;
+  line-height:1.42; margin:0; color:var(--ink)}
+.answer p{margin:0; color:var(--ink-2); max-width:62ch}
+.answer strong{color:var(--ink); font-weight:600}
+.answer em{color:var(--ink); font-style:italic}
+
+/* option list */
+.opt{display:grid; grid-template-columns:104px 1fr; gap:0 22px;
+  background:var(--surface); border:1px solid var(--rule-soft); padding:18px clamp(15px,2.2vw,22px)}
+@media (max-width:600px){.opt{grid-template-columns:1fr; gap:10px}}
+
+/* table */
+.tablewrap{overflow-x:auto; border:1px solid var(--rule); border-radius:3px;
+  background:var(--surface); margin-top:20px}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:.94rem}
+caption{caption-side:bottom; text-align:left; padding:14px 18px; color:var(--ink-3);
+  font-size:.85rem; line-height:1.5; border-top:1px solid var(--rule-soft)}
+th,td{padding:12px 18px; text-align:right; border-bottom:1px solid var(--rule-soft)}
+th:first-child,td:first-child{text-align:left}
+thead th{font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+  background:var(--sunk); border-bottom:1px solid var(--rule); white-space:nowrap}
+thead th .sub{display:block; font-weight:400; letter-spacing:.04em;
+  text-transform:none; color:var(--ink-3); opacity:.8; padding-top:2px}
+tbody td{font-variant-numeric:tabular-nums; color:var(--ink-2)}
+tbody td:first-child{color:var(--ink); font-weight:500}
+.dim{color:var(--ink-3)}
+
+/* flip test */
+
+/* checks */
+
+footer{margin-top:clamp(44px,6vw,72px); padding-top:24px;
+  border-top:1px solid var(--rule); color:var(--ink-3); font-size:.87rem; line-height:1.6}
+footer p{margin:0 0 10px; max-width:68ch}
+footer strong{color:var(--ink-2)}
+
+/* ---------- charts ---------- */
+.figure{background:var(--surface); border:1px solid var(--rule); border-radius:3px;
+  padding:20px clamp(14px,2vw,22px) 16px; margin-top:20px; position:relative}
+.figure h3{margin:0 0 2px; font-family:Newsreader,Georgia,serif; font-weight:600;
+  font-size:1.06rem; letter-spacing:-.006em}
+.figure .sub{margin:0 0 14px; color:var(--ink-3); font-size:.88rem}
+.legend{display:flex; flex-wrap:wrap; gap:6px 16px; margin:0 0 12px; padding:0; list-style:none}
+.legend li{display:flex; align-items:center; gap:7px; font-size:.83rem; color:var(--ink-2)}
+.swatch{width:14px; height:3px; border-radius:2px; flex:0 0 auto}
+.chartwrap{overflow-x:auto}
+.chart{width:100%; min-width:560px; height:auto; display:block; touch-action:pan-y}
+.grid{stroke:var(--rule-soft); stroke-width:1}
+.ytick,.xtick,.endlbl{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.ytick{fill:var(--ink-3); font-size:10.5px; text-anchor:end}
+.xtick{fill:var(--ink-3); font-size:10.5px; text-anchor:middle}
+.endlbl{font-size:10.5px; font-weight:600}
+.ln{fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+.dot{stroke:var(--surface); stroke-width:2}
+.hit{fill:transparent}
+.cross{stroke:var(--ink-3); stroke-width:1; stroke-dasharray:3 3; pointer-events:none}
+.s1{stroke:var(--s1)} .s2{stroke:var(--s2)} .s3{stroke:var(--s3)}
+.s4{stroke:var(--s4)} .s5{stroke:var(--s5)}
+circle.s1{fill:var(--s1)} circle.s2{fill:var(--s2)} circle.s3{fill:var(--s3)}
+circle.s4{fill:var(--s4)} circle.s5{fill:var(--s5)}
+text.s1{fill:var(--s1); stroke:none} text.s2{fill:var(--s2); stroke:none}
+text.s3{fill:var(--s3); stroke:none} text.s4{fill:var(--s4); stroke:none}
+text.s5{fill:var(--s5); stroke:none}
+.tip{position:absolute; pointer-events:none; opacity:0; transition:opacity .1s;
+  background:var(--surface); border:1px solid var(--rule); border-radius:3px;
+  box-shadow:var(--shadow); padding:9px 12px; font-size:.8rem; z-index:5; min-width:186px}
+.tip .ty{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.1em;
+  color:var(--ink-3); text-transform:uppercase; margin-bottom:5px}
+.tip .tr{display:flex; align-items:center; gap:7px; justify-content:space-between;
+  color:var(--ink-2); line-height:1.55}
+.tip .tr b{font-family:"IBM Plex Mono",monospace; color:var(--ink); font-weight:600;
+  font-variant-numeric:tabular-nums}
+details.tv{margin-top:14px; border-top:1px solid var(--rule-soft); padding-top:12px}
+details.tv summary{cursor:pointer; font-size:.86rem; color:var(--accent)}
+details.tv table{min-width:640px; font-size:.85rem; margin-top:12px}
+
+a{color:var(--accent); text-underline-offset:2px}
+a:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+
+/* ---------- summary card ---------- */
+div.verdict{margin-top:34px; background:var(--surface); border:1px solid var(--rule);
+  border-left:3px solid var(--accent); border-radius:3px;
+  padding:clamp(20px,3vw,30px); box-shadow:var(--shadow);
+  display:flex; flex-direction:column; gap:14px}
+div.verdict h2{margin:0; font-family:"IBM Plex Mono",monospace; font-size:11.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:600}
+h2.sec{margin:0 0 4px}
+
+/* ---------- highlighted table rows ---------- */
+tr.worst td{background:var(--no-soft)}
+tr.worst td:first-child{color:var(--no); font-weight:600}
+tr.best td{background:var(--accent-soft)}
+tr.best td:first-child{color:var(--accent); font-weight:600}
+
+/* ---------- numbered next-steps ---------- */
+ol.seq{list-style:none; counter-reset:s; margin:0; padding:0; display:flex;
+  flex-direction:column; gap:2px}
+ol.seq li{counter-increment:s; position:relative; background:var(--surface);
+  border:1px solid var(--rule-soft); padding:18px 22px 18px 60px}
+ol.seq li + li{border-top:none}
+ol.seq li:first-child{border-radius:3px 3px 0 0}
+ol.seq li:last-child{border-radius:0 0 3px 3px}
+ol.seq li::before{content:counter(s); position:absolute; left:22px; top:18px;
+  font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:600;
+  color:var(--accent); font-variant-numeric:tabular-nums}
+ol.seq .why{display:block; color:var(--ink-3); font-size:.9rem; margin-top:3px}
+
+/* ---------- plain-language layout ---------- */
+.short{list-style:none; counter-reset:v; margin:0; padding:0; display:flex;
+  flex-direction:column; gap:14px}
+.short li{counter-increment:v; position:relative; padding-left:34px; color:var(--ink-2);
+  font-size:1.04rem; line-height:1.55}
+.short li::before{content:counter(v); position:absolute; left:0; top:2px; width:22px;
+  height:22px; border-radius:50%; background:var(--accent-soft); color:var(--accent);
+  font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600;
+  display:flex; align-items:center; justify-content:center}
+.short strong{color:var(--ink)}
+.calm{margin:16px 0 0; padding-top:14px; border-top:1px solid var(--rule-soft);
+  color:var(--ink-3); font-size:.94rem}
+.answer.warn{border-left-color:var(--warn)}
+.pill{display:inline-block; margin-left:7px; padding:2px 7px; border-radius:2px;
+  background:var(--accent-soft); color:var(--accent); font-size:9.5px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; font-family:"IBM Plex Mono",monospace;
+  vertical-align:1px}
+details.appendix{margin-top:clamp(40px,6vw,64px); border-top:1px solid var(--rule);
+  padding-top:22px}
+details.appendix > summary{cursor:pointer; font-family:Newsreader,Georgia,serif;
+  font-size:1.15rem; color:var(--accent); list-style:none}
+details.appendix > summary::-webkit-details-marker{display:none}
+details.appendix > summary::before{content:"+ "; font-family:"IBM Plex Mono",monospace}
+details.appendix[open] > summary::before{content:"- "}
+.apxbody{padding-top:8px}
+.apxbody h3{font-family:Newsreader,Georgia,serif; font-weight:600; font-size:1.05rem;
+  margin:22px 0 6px; letter-spacing:-.005em}
+.apxbody p{margin:0 0 10px; color:var(--ink-2); font-size:.94rem; max-width:66ch}
+.apxbody strong{color:var(--ink)}
+section{padding-top:clamp(40px,5.5vw,60px)}
+section > .dhead{margin-bottom:2px}
+</style>
+<div class="wrap">
+<header class="mast">
+  <div class="eyebrow"><span>Prepared for the family</span><span>Marietta, Georgia</span></div>
+  <h1>What to do with the retirement account</h1>
+  <p class="standfirst">There is a lot going on right now, so this is only about the 401(k) — nothing else. There are really just <strong>two questions</strong>, and both have clear answers.</p>
+</header>
+
+<div class="verdict">
+  <h2>The short version</h2>
+  <ol class="short">
+    <li><strong>Leave the account in his name.</strong> Moving it into her name would cost around <strong>$30,000</strong> in penalties, and it can be moved later for free.</li>
+    <li><strong>Don't pay off the house.</strong> Doing that costs about <strong>$92,000</strong> over ten years. Take a little out each year instead.</li>
+  </ol>
+  <p class="calm">That's the whole thing. Nothing has to be decided this week, and nothing needs to come out of the account this year at all.</p>
+</div>
+
+<section>
+  <div class="dhead"><span class="dnum">Question 1</span></div>
+  <h2 class="sec">Should the account be moved into her name?</h2>
+  <div class="answer">
+    <p class="verdict">No — not for another seven years.</p>
+    <p>Money inherited from a husband or wife can be taken out <strong>at any age with no penalty</strong>. That protection belongs to the account, not to her. The moment it moves into her own name it becomes her retirement money, and anything taken out before she turns 59½ gets hit with a 10% penalty. She's 52.</p>
+    <p>There are a few small advantages to having it in her own name. <strong>All of them are still available at 59½</strong>, and moving it then costs nothing. So this isn't really a trade-off — it's just a reason to wait.</p>
+    <p><strong>What that looks like in practice:</strong> the account either stays where it is at his employer, or it moves to what's called an <em>inherited IRA</em> — still legally his money, with her as the beneficiary. An inherited IRA is usually easier to deal with, and if his employer's plan won't allow small withdrawals, it's the only real option anyway.</p>
+  </div>
+  <div class="answer warn">
+    <p><strong>One thing to be careful about.</strong> If the account does get moved, it has to go <em>directly</em> from one company to the other. If a check is ever written to her personally, the entire account becomes taxable in a single year. Whoever handles the paperwork should know this — but it's worth saying out loud.</p>
+  </div>
+</section>
+
+<section>
+  <div class="dhead"><span class="dnum">Question 2</span></div>
+  <h2 class="sec">Should she cash it out to pay off the house?</h2>
+  <div class="answer">
+    <p class="verdict">No. Paying it off now costs about $92,000 over ten years.</p>
+    <p>The house is the reason this feels urgent, but the mortgage isn't really the problem. It's at about 2.5% — remarkably cheap — and with only ten years left, most of each payment is already going to principal rather than interest. <strong>All the interest left on the loan adds up to roughly $22,000.</strong></p>
+    <p>To clear it today she'd have to pull about <strong>$233,000</strong> out of the account, because around $67,000 of that goes straight to taxes. Taking it all in one year pushes her into a much higher tax bracket than spreading it out would.</p>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th scope="col">Option</th><th scope="col">Taxes paid</th>
+      <th scope="col">House paid off</th><th scope="col">Money left in 2035</th></tr></thead>
+      <tbody>
+        <tr class="worst"><td>Pay off the house now</td><td>$67,468</td><td>2026</td><td>$700,042</td></tr>
+        <tr class="best"><td>Take a little each year <span class="pill">simplest</span></td><td>$54,384</td><td>2035</td><td>$792,155</td></tr>
+        <tr><td>Take more in 2027–28, put it on the house</td><td>$44,468</td><td><strong>2033</strong></td><td>$785,685</td></tr>
+      </tbody>
+      <caption>"Money left" is the retirement account plus any savings, minus whatever is still owed on the house. All three options pay off the same mortgage — the only difference is how much is left at the end.</caption>
+    </table>
+  </div>
+
+  <figure class="figure" id="fig-net">
+    <h3>Where each option leaves her</h3>
+    <p class="sub">Paying off the house now starts her a long way behind, and she never catches up.</p>
+    <ul class="legend"><li><span class="swatch" style="background:var(--s1)"></span>Pay off the house now</li><li><span class="swatch" style="background:var(--s2)"></span>Take a little each year</li><li><span class="swatch" style="background:var(--s3)"></span>Take more in 2027–28, put it on the house</li></ul>
+    <div class="chartwrap"><svg viewBox="0 0 720 330" role="img" class="chart" preserveAspectRatio="xMidYMid meet">
+<line class="grid" x1="58" x2="528" y1="288.0" y2="288.0"/>
+<text class="ytick" x="48" y="292.0">$400K</text>
+<line class="grid" x1="58" x2="528" y1="224.7" y2="224.7"/>
+<text class="ytick" x="48" y="228.7">$500K</text>
+<line class="grid" x1="58" x2="528" y1="161.3" y2="161.3"/>
+<text class="ytick" x="48" y="165.3">$600K</text>
+<line class="grid" x1="58" x2="528" y1="98.0" y2="98.0"/>
+<text class="ytick" x="48" y="102.0">$700K</text>
+<line class="grid" x1="58" x2="528" y1="34.7" y2="34.7"/>
+<text class="ytick" x="48" y="38.7">$800K</text>
+<text class="xtick" x="58.0" y="308">2026</text>
+<text class="xtick" x="162.4" y="308">2028</text>
+<text class="xtick" x="266.9" y="308">2030</text>
+<text class="xtick" x="371.3" y="308">2032</text>
+<text class="xtick" x="475.8" y="308">2034</text>
+<text class="xtick" x="528.0" y="308">2035</text>
+<polyline class="ln s1" points="58.0,275.6 110.2,260.1 162.4,243.7 214.7,226.3 266.9,207.8 319.1,188.3 371.3,167.6 423.6,145.7 475.8,122.5 528.0,98.0"/>
+<circle class="dot s1" cx="528.0" cy="98.0" r="4.5"/>
+<polyline class="ln s2" points="58.0,227.7 110.2,208.7 162.4,188.9 214.7,169.9 266.9,150.2 319.1,129.7 371.3,108.4 423.6,86.5 475.8,63.7 528.0,39.6"/>
+<circle class="dot s2" cx="528.0" cy="39.6" r="4.5"/>
+<polyline class="ln s3" points="58.0,227.7 110.2,212.0 162.4,196.3 214.7,178.7 266.9,160.5 319.1,141.6 371.3,122.0 423.6,98.5 475.8,71.9 528.0,43.7"/>
+<circle class="dot s3" cx="528.0" cy="43.7" r="4.5"/>
+<text class="endlbl s2" x="537" y="43.6">$792K</text>
+<text class="endlbl s3" x="537" y="58.6">$786K</text>
+<text class="endlbl s1" x="537" y="102.0">$700K</text>
+<rect class="hit" data-i="0" x="31.9" y="22" width="52.2" height="266"/>
+<rect class="hit" data-i="1" x="84.1" y="22" width="52.2" height="266"/>
+<rect class="hit" data-i="2" x="136.3" y="22" width="52.2" height="266"/>
+<rect class="hit" data-i="3" x="188.6" y="22" width="52.2" height="266"/>
+<rect class="hit" data-i="4" x="240.8" y="22" width="52.2" height="266"/>
+<rect class="hit" data-i="5" x="293.0" y="22" width="52.2" height="266"/>
+<rect class="hit" data-i="6" x="345.2" y="22" width="52.2" height="266"/>
+<rect class="hit" data-i="7" x="397.4" y="22" width="52.2" height="266"/>
+<rect class="hit" data-i="8" x="449.7" y="22" width="52.2" height="266"/>
+<rect class="hit" data-i="9" x="501.9" y="22" width="52.2" height="266"/>
+<line class="cross" x1="0" x2="0" y1="22" y2="288" style="opacity:0"/>
+</svg></div>
+    <div class="tip"></div>
+    <details class="tv"><summary>View as a table</summary>
+      <div class="tablewrap"><table><thead><tr><th scope="col">Year</th><th scope="col">Pay off the house now</th><th scope="col">Take a little each year</th><th scope="col">Take more in 2027–28, put it on the house</th></tr></thead>
+      <tbody><tr><td>2026</td><td>$419,536</td><td>$495,244</td><td>$495,244</td></tr><tr><td>2027</td><td>$444,029</td><td>$525,225</td><td>$520,015</td></tr><tr><td>2028</td><td>$469,975</td><td>$556,474</td><td>$544,847</td></tr><tr><td>2029</td><td>$497,461</td><td>$586,421</td><td>$572,582</td></tr><tr><td>2030</td><td>$526,577</td><td>$617,556</td><td>$601,333</td></tr><tr><td>2031</td><td>$557,423</td><td>$649,931</td><td>$631,143</td></tr><tr><td>2032</td><td>$590,101</td><td>$683,605</td><td>$662,057</td></tr><tr><td>2033</td><td>$624,653</td><td>$718,183</td><td>$699,257</td></tr><tr><td>2034</td><td>$661,259</td><td>$754,220</td><td>$741,212</td></tr><tr><td>2035</td><td>$700,042</td><td>$792,155</td><td>$785,685</td></tr></tbody></table></div>
+    </details>
+  </figure>
+
+  <div class="answer" style="margin-top:20px">
+    <p class="verdict">Between the last two options it's genuinely her call — they're only about $6,500 apart.</p>
+    <p><strong>Take a little each year</strong> is the simplest thing to do: pull just enough to cover the mortgage, leave everything else alone.</p>
+    <p><strong>Take more in 2027–28</strong> uses a tax break she qualifies for as a widow. For those two years only, money taken out is taxed at roughly <strong>17% instead of 27%</strong>. Taking about $48,000 in each of those years and putting the extra straight onto the loan pays the house off in <strong>2033 instead of 2035</strong>, and comes with the lowest tax bill of all three options.</p>
+    <p>It finishes about $6,500 behind — a small price if having the house paid off sooner would take some weight off her shoulders. There is no wrong answer between these two.</p>
+  </div>
+</section>
+
+<section>
+  <div class="dhead"><span class="dnum">Worth knowing</span></div>
+  <h2 class="sec">Paying off the house wouldn't end the monthly payment</h2>
+  <div class="answer warn">
+    <p>The $2,205.16 that goes out each month isn't all mortgage. About <strong>$1,577 of it is the loan</strong>; the other <strong>$628 is property taxes and insurance</strong>, collected along with the payment — roughly $7,500 a year.</p>
+    <p>That part continues for as long as she owns the house. So even if the mortgage were cleared tomorrow, the monthly bill wouldn't disappear — it would drop by about 72%, not to zero. Better to know that before the decision than after.</p>
+  </div>
+</section>
+
+<section>
+  <div class="dhead"><span class="dnum">Next steps</span></div>
+  <h2 class="sec">What to actually do</h2>
+  <ol class="seq">
+    <li><strong>Take nothing out of the account this year.</strong><span class="why">There's no need to, and 2026 happens to be the most expensive year for it — his income and hers are both on this year's tax return.</span></li>
+    <li><strong>Don't sign anything that moves the account into her name.</strong><span class="why">If paperwork shows up, this is the one box not to tick. It can always be done later.</span></li>
+    <li><strong>Ask his employer's plan two questions.</strong><span class="why">Can she take small withdrawals as a beneficiary, or only the whole balance at once? And does the account hold any company stock? The second one matters a great deal and is easy to ruin by accident.</span></li>
+    <li><strong>Have a CPA look at this before the first withdrawal.</strong><span class="why">Not urgent — but before any money moves. Everything above is worth confirming with someone who can see the actual statements.</span></li>
+  </ol>
+</section>
+
+<details class="appendix">
+  <summary>The details behind all this</summary>
+  <div class="apxbody">
+    <h3>Why 2027 and 2028 are cheaper</h3>
+    <p>For the year someone dies, the surviving spouse still files jointly. For the two years after that, if there's a dependent child at home, she can file as a <em>Qualifying Surviving Spouse</em> — which keeps the wide married-couple tax brackets while only her single income fills them. That's what creates roughly $48,000 of room taxed at about 17% in each of 2027 and 2028. From 2029 she files as Head of Household and that room shrinks to about $4,000; from 2033 she's back to 27% on the first dollar.</p>
+    <p>Two things would close that window: the child no longer qualifying as a dependent, or remarrying before the end of 2028. Both worth confirming.</p>
+
+    <h3>The 20% withholding rule</h3>
+    <p>Money coming out of an employer 401(k) has 20% held back automatically and sent to the IRS. <strong>This is not an extra tax</strong> — it's a prepayment, credited on her tax return and refunded if too much was taken. It just means that to actually receive $10,000 she has to request about $12,500, and the excess sits with the IRS until she files. An inherited IRA doesn't work this way: withholding starts at 10% and can be adjusted or switched off. It's a convenience, not a reason to pick one over the other.</p>
+
+    <h3>An option we left out</h3>
+    <p>There's a fourth variation — take more in 2027–28, but put the extra into savings rather than onto the loan. It came out about $3,900 ahead of "take a little each year" over ten years, which is close enough to nothing that it isn't worth the added complexity. Noted only so it doesn't look overlooked.</p>
+
+    <h3>What we assumed</h3>
+    <p>Confirmed: $167,332 left on the mortgage with about ten years to run, a $2,205.16 monthly payment, her salary of $86,000, his $80,000 earned in 2026, and a $611,000 retirement account.</p>
+    <p>Assumed: a 2.5% mortgage rate, a 6% return on money left invested, 3% on money set aside in savings, and her salary rising about 3% a year. The tax rules are 2026 law — federal brackets, Georgia's 4.99% flat rate, and the penalty exemption for inherited accounts.</p>
+    <p>The 2.5% rate checks out. At that rate the loan portion of the payment is $1,577.44, leaving about $628 of taxes and insurance — right for a house of this value in Cobb County. Even if the real rate is 3%, the total interest changes by only about $4,600, which doesn't affect any of the conclusions.</p>
+
+    <h3>Please read this part</h3>
+    <p><strong>This is analysis, not financial advice.</strong> It was built from figures given over the phone rather than from statements. The decision about whose name the account is in, and the company-stock question, cannot be undone once they're done — both are worth twenty minutes with a CPA or a fee-only advisor (one paid by the hour, not on commission) before anything gets signed.</p>
+  </div>
+</details>
+
+</div>
+<script>
+(function(){
+  var DATA = {"years": [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035], "names": ["Pay off the house now", "Take a little each year", "Take more in 2027\u201328, put it on the house"], "net": [[419536, 444029, 469975, 497461, 526577, 557423, 590101, 624653, 661259, 700042], [495244, 525225, 556474, 586421, 617556, 649931, 683605, 718183, 754220, 792155], [495244, 520015, 544847, 572582, 601333, 631143, 662057, 699257, 741212, 785685]]};
+  function money(v){ return "$" + v.toLocaleString("en-US"); }
+  [["fig-net","net"]].forEach(function(pair){
+    var fig = document.getElementById(pair[0]); if(!fig) return;
+    var svg = fig.querySelector("svg"), tip = fig.querySelector(".tip"),
+        cross = svg.querySelector(".cross"), rows = DATA[pair[1]];
+    function show(i, rect){
+      var r = svg.getBoundingClientRect(), fr = fig.getBoundingClientRect(),
+          cx = +rect.getAttribute("x") + (+rect.getAttribute("width"))/2,
+          vb = svg.viewBox.baseVal, px = r.left + (cx/vb.width)*r.width;
+      cross.setAttribute("x1", cx); cross.setAttribute("x2", cx);
+      cross.style.opacity = ".55";
+      var h = '<div class="ty">' + DATA.years[i] + '</div>';
+      DATA.names.forEach(function(n, si){
+        h += '<div class="tr"><span><span class="swatch" style="display:inline-block;'
+           + 'background:var(--s' + (si+1) + ')"></span> ' + n + '</span><b>'
+           + money(rows[si][i]) + '</b></div>';
+      });
+      tip.innerHTML = h; tip.style.opacity = "1";
+      var left = px - fr.left + 16;
+      if(left + tip.offsetWidth > fr.width - 8) left = px - fr.left - tip.offsetWidth - 16;
+      tip.style.left = Math.max(8, left) + "px";
+      tip.style.top = (r.top - fr.top + 14) + "px";
+    }
+    svg.querySelectorAll(".hit").forEach(function(rect){
+      ["pointerenter","pointermove"].forEach(function(ev){
+        rect.addEventListener(ev, function(){ show(+rect.dataset.i, rect); });
+      });
+    });
+    svg.addEventListener("pointerleave", function(){
+      tip.style.opacity = "0"; cross.style.opacity = "0";
+    });
+  });
+})();
+</script>
