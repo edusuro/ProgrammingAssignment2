@@ -17,7 +17,7 @@ class Inputs:
     her_age_start: float = 52                 # CONFIRMED (b. 1974)
     #   He was 50 at death, ~25 years short of his RMD age of 75, so
     #   nothing is forced out of the account until roughly 2051.
-    child_age_start: int = 12                 # PLACEHOLDER
+    child_age_start: int = 13                 # CONFIRMED
     start_year: int = 2026
     horizon_year: int = 2046                  # model through her age 72
 
